@@ -1,59 +1,34 @@
-public class Account {
-    private String id;
-    private String name;
-    private int balance;
+public abstract class Account {
+    protected String id;
+    protected String name;
+    protected double balance;
     
-    
-    public Account(String id, String name) {
-        this.id = id;
-        this.name = name;
-        this.balance = 0;
-    }
-    
-    
-    public Account(String id, String name, int balance) {
+    public Account(String id, String name, double balance) {
         this.id = id;
         this.name = name;
         this.balance = balance;
     }
     
-    public String getID() {
-        return id;
-    }
+    public String getID() { return id; }
+    public String getName() { return name; }
+    public double getBalance() { return balance; }
     
-    public String getName() {
-        return name;
-    }
+    // Deposit with interest if applicable
+    public abstract void deposit(double amount);
     
-    public int getBalance() {
-        return balance;
-    }
+    // Withdraw with rules
+    public abstract boolean withdraw(double amount);
     
-    public int credit(int amount) {
-        balance += amount;
-        return balance;
-    }
-    
-    public int debit(int amount) {
-        if (amount <= balance) {
-            balance -= amount;
-        } else {
-            System.out.println("Amount exceeded balance");
+    // Transfer with rules
+    public boolean transferTo(Account another, double amount) {
+        if (this.withdraw(amount)) {
+            another.deposit(amount);
+            return true;
         }
-        return balance;
-    }
-    
-    public int transferTo(Account another, int amount) {
-        if (amount <= balance) {
-            this.balance -= amount;
-            another.balance += amount;
-        } else {
-            System.out.println("Amount exceeded balance");
-        }
-        return balance;
+        return false;
     }
     
     public String toString() {
-        return "Account[id=" + id + ",name=" + name + ",balance=" + balance + "]";
+        return getClass().getSimpleName() + "[id=" + id + ", name=" + name + ", balance=" + balance + "]";
     }
 }
